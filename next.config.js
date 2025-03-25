@@ -11,6 +11,8 @@ const config = {
 				pathname: '**',
 			},
 		],
+
+		domains: ["i.ibb.co"], 
 	},
 	eslint: {
 		ignoreDuringBuilds: true,
