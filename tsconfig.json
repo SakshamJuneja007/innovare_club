@@ -8,6 +8,7 @@
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "isolatedModules": true,
+    "strictNullChecks": false,
 
     /* Strictness */
     "strict": true,
@@ -36,7 +37,15 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/styles/global.css"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules/*",
+    ".next",
+    "out",
+    "build",
+    "dist",
+    "supabase"
+  ]
 }
