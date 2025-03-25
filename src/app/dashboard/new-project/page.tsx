@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import CyberInput from "@/components/CyberInput";
 import CyberButton from "@/components/CyberButton";
-import { Target, GitBranch, Users, Calendar } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import CollaboratorSelect from "@/components/CollaboratorSelect";

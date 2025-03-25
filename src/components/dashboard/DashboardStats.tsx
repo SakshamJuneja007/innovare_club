@@ -28,12 +28,15 @@ export default function DashboardStats() {
 
         // Fetch dashboard stats
         const { data: statsData, error: statsError } = await supabase
-          .from('dashboard_stats')
-          .select('*')
-          .single();
+  .from("dashboard_stats")
+  .select("*")
+  .limit(1) // ✅ Ensures only 1 row is fetched
+  .maybeSingle(); // ✅ Prevents error if table is empty
 
-        if (statsError) throw statsError;
-        setStats(statsData);
+if (statsError) {
+  console.error("Error fetching stats:", statsError);
+}
+setStats(statsData);
 
         // Fetch activity metrics
         const { data: metricsData, error: metricsError } = await supabase

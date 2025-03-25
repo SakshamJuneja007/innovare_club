@@ -47,19 +47,24 @@ export default function DashboardEvents() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true; // Prevents state updates on unmounted components
+  
     const fetchEvents = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return;
-
+  
         const { data, error } = await supabase
           .from('dashboard_events')
           .select('*')
           .order('date', { ascending: true });
-
+  
         if (error) throw error;
-        setEvents(data);
-
+  
+        if (isMounted) {
+          setEvents(data);
+        }
+  
         // Subscribe to real-time changes
         const subscription = supabase
           .channel('dashboard_events')
@@ -71,73 +76,41 @@ export default function DashboardEvents() {
               table: 'dashboard_events'
             },
             (payload) => {
+              if (!isMounted) return; // Avoid updates after unmount
+  
               if (payload.eventType === 'INSERT') {
                 setEvents(prev => [...prev, payload.new as Event].sort((a, b) => 
                   new Date(a.date).getTime() - new Date(b.date).getTime()
                 ));
-                toast.success("New event added to dashboard");
               } else if (payload.eventType === 'UPDATE') {
                 setEvents(prev => prev.map(event => 
                   event.id === payload.new.id ? payload.new as Event : event
-                ).sort((a, b) => 
-                  new Date(a.date).getTime() - new Date(b.date).getTime()
                 ));
-                toast.info("Event updated");
               } else if (payload.eventType === 'DELETE') {
                 setEvents(prev => prev.filter(event => event.id !== payload.old.id));
-                toast.info("Event removed from dashboard");
               }
             }
           )
           .subscribe();
-
+  
         return () => {
           subscription.unsubscribe();
         };
       } catch (error) {
         console.error("Error fetching events:", error);
-        toast.error("Failed to load dashboard events");
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
-
-    const cleanup = fetchEvents();
+  
+    fetchEvents();
+  
     return () => {
-      if (cleanup) cleanup();
-    };
-
-    // Subscribe to real-time changes
-    const subscription = supabase
-      .channel('dashboard_events_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'dashboard_events'
-        },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setEvents(prev => [...prev, payload.new as Event].sort((a, b) => 
-              new Date(a.date).getTime() - new Date(b.date).getTime()
-            ));
-          } else if (payload.eventType === 'UPDATE') {
-            setEvents(prev => prev.map(event => 
-              event.id === payload.new.id ? payload.new as Event : event
-            ));
-          } else if (payload.eventType === 'DELETE') {
-            setEvents(prev => prev.filter(event => event.id !== payload.old.id));
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
+      isMounted = false; // Prevent updates after unmount
     };
   }, []);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
