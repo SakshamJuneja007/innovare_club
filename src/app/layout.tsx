@@ -3,7 +3,6 @@ import CyberIndustrialBackground from "@/components/ui/CyberIndustrialBackground
 import PageTransition from "@/components/PageTransition";
 import { CyberErrorBoundary } from "@/components/ui/CyberErrorBoundary";
 import CyberTerminal from "@/components/ui/CyberTerminal";
-import AIChatAssistant from "@/components/ui/AIChatAssistant";
 import "@/styles/globals.css";
 import "@fontsource/orbitron";
 import "@fontsource/share-tech-mono";
@@ -29,7 +28,6 @@ export default function RootLayout({
           <PageTransition>
             {children}
           </PageTransition>
-          <AIChatAssistant />
         </CyberErrorBoundary>
       </body>
     </html>
