@@ -17,17 +17,6 @@ interface FractalDotGridProps {
   initialPerformance?: "low" | "medium" | "high";
 }
 
-const NoiseOverlay: React.FC<{ opacity: number }> = ({ opacity }) => (
-  <div className="absolute inset-0 h-full w-full mix-blend-overlay" style={{ opacity }}>
-    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-      <filter id="noise">
-        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-      </filter>
-      <rect width="100%" height="100%" filter="url(#noise)" />
-    </svg>
-  </div>
-);
-
 const usePerformance = (initialPerformance: "low" | "medium" | "high" = "medium") => {
   const [performance, setPerformance] = useState(initialPerformance);
   const [fps, setFps] = useState(60);
@@ -52,6 +41,16 @@ const usePerformance = (initialPerformance: "low" | "medium" | "high" = "medium"
     return () => cancelAnimationFrame(framerId);
   }, []);
 
+  useEffect(() => {
+    if (fps < 30 && performance !== "low") {
+      setPerformance("low");
+    } else if (fps >= 30 && fps < 50 && performance !== "medium") {
+      setPerformance("medium");
+    } else if (fps >= 50 && performance !== "high") {
+      setPerformance("high");
+    }
+  }, [fps, performance]);
+
   return { performance, fps };
 };
 
@@ -74,12 +73,13 @@ const DotCanvas: React.FC<{
     ctx.clearRect(0, 0, width, height);
 
     const performanceSettings = {
-      low: { skip: 4 },
+      low: { skip: 4 }, // Skip more rows/columns for better performance
       medium: { skip: 2 },
       high: { skip: 1 },
     };
 
     const skip = performanceSettings[performance].skip;
+
     const cols = Math.ceil(width / dotSpacing);
     const rows = Math.ceil(height / dotSpacing);
 
@@ -161,11 +161,11 @@ const DotCanvas: React.FC<{
 DotCanvas.displayName = "DotCanvas";
 
 export function FractalDotGrid({
-  dotSize = 3,
-  dotSpacing = 25,
+  dotSize = 5, // Slightly larger dots
+  dotSpacing = 40, // Increased spacing (reduces total dots)
   dotOpacity = 0.5,
-  waveIntensity = 15,
-  waveRadius = 150,
+  waveIntensity = 15, // Less intense wave effect
+  waveRadius = 150, // Smaller interaction radius
   dotColor = "rgba(255, 255, 255, 1)",
   glowColor = "rgba(100, 100, 255, 1)",
   enableNoise = true,
@@ -173,13 +173,15 @@ export function FractalDotGrid({
   enableMouseGlow = true,
   initialPerformance = "medium",
 }: FractalDotGridProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const { performance } = usePerformance(initialPerformance);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = useCallback((event: MouseEvent) => {
     const { clientX, clientY } = event;
-    const x = clientX / window.innerWidth;
-    const y = clientY / window.innerHeight;
+    const { left, top, width, height } = containerRef.current?.getBoundingClientRect() ?? { left: 0, top: 0, width: 0, height: 0 };
+    const x = (clientX - left) / width;
+    const y = (clientY - top) / height;
     setMousePos({ x, y });
   }, []);
 
@@ -190,7 +192,7 @@ export function FractalDotGrid({
 
   return (
     <AnimatePresence>
-      <motion.div key="fractal-dot-grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5, ease: "easeOut" }} className="absolute inset-0 overflow-hidden w-full h-full">
+      <motion.div ref={containerRef} key="fractal-dot-grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5, ease: "easeOut" }} className="absolute inset-0 overflow-hidden w-full h-full">
         <DotCanvas dotSize={dotSize} dotSpacing={dotSpacing} dotOpacity={dotOpacity} waveIntensity={waveIntensity} waveRadius={waveRadius} dotColor={dotColor} glowColor={glowColor} performance={performance} mousePos={mousePos} />
       </motion.div>
     </AnimatePresence>
