@@ -19,7 +19,6 @@
     "test:all": "pnpm run test && pnpm run test:types"
   },
   "dependencies": {
-"react" : ^18.0.0 
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
@@ -78,7 +77,7 @@
     "postcss-syntax": "^0.36.2",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "react": "^18.3.1",
+    "react": "^18.0.0",
     "react-avatar-editor": "^13.0.2",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.3.1",
