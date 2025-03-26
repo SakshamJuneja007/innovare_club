@@ -12,11 +12,17 @@ export default function HeroSection() {
     <motion.div 
       className="flex flex-col lg:flex-row items-center justify-between min-h-[calc(100vh-5rem)] gap-8 py-6 lg:py-0 px-4 lg:px-0 mt-8 md:mt-0"
     >
-      <h1 
-        className="text-4xl md:text-5xl lg:text-7xl font-bold text-[#CFFB2D] font-['Permanent Marker'] leading-tight text-center lg:text-left"
-      >
-        Innovare<br/>Technical<br/>Club
-      </h1>
+<div className="text-center lg:text-left">
+  <img
+    src="https://i.ibb.co/yc75TK24/Whats-App-Image-2025-03-25-at-1-27-00-AM-removebg-preview.png"
+    alt="Technical Club Logo"
+    className="mx-auto lg:mx-0 w-90 md:w-32 lg:w-[80%] mb-4"
+  />
+  <h1 className="text-5xl md:text-5xl lg:text-8xl font-bold text-[#CFFB2D] font-['Permanent Marker'] leading-tight">
+    Technical Club
+  </h1>
+</div>
+
 
       <div
         className="w-full lg:w-[500px] rounded-2xl bg-gradient-to-br from-[#8B30FF]/20 to-[#C661E3]/20 p-4 lg:p-8 backdrop-blur-md border border-[#CFFB2D]/20"

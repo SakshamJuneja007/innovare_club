@@ -16,7 +16,7 @@ const galleryImages = [
   { src: "https://i.ibb.co/0j18d8VK/Whats-App-Image-2025-03-24-at-2-55-46-PM-1.jpg", alt: "Hackathon 2024 Team Collaboration", categories: ["Hackathon 2024"] },
   { src: "https://i.ibb.co/23rGJmQm/Whats-App-Image-2025-03-24-at-2-55-42-PM.jpg", alt: "Hackathon 2024 Winners", categories: ["Hackathon 2024"] },
   { src: "https://i.ibb.co/8nVMdyZh/Whats-App-Image-2025-03-24-at-2-55-44-PM-1.jpg", alt: "Hackathon 2024 Team Collaboration", categories: ["Hackathon 2024"] },
-  { src: "https://i.ibb.co/23rGJmQm/Whats-App-Image-2025-03-24-at-2-55-42-PM.jpg", alt: "Hackathon 20243 Winners", categories: ["Techfest 2023"] },
+  { src: "https://i.ibb.co/TqD4rh8R/Whats-App-Image-2025-03-24-at-2-55-46-PM.jpg", alt: "Hackathon 20243 Winners", categories: ["Techfest 2023"] },
 ];
 
 function ParallaxImage({ src, alt, index }: { src: string; alt: string; index: number }) {

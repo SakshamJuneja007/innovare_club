@@ -25,6 +25,7 @@ export default function NewEventPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Submitting event...")
     setLoading(true);
 
     try {
@@ -35,22 +36,28 @@ export default function NewEventPage() {
       }
 
       const { data: eventData, error: eventError } = await supabase
-        .from('dashboard_events')
-        .insert({
-          title: formData.title,
-          date: formData.date,
-          time: formData.time,
-          location: formData.location,
-          type: formData.type,
-          capacity: parseInt(formData.capacity || '0'),
-          description: formData.description,
-          user_id: session.user.id,
-          status: 'pending',
-          created_at: new Date().toISOString()
-        })
-        .select()
-        .single();
-
+      .from("dashboard_events")
+      .insert({
+        title: formData.title,
+        date: formData.date,
+        time: formData.time,
+        location: formData.location,
+        type: formData.type,
+        capacity: parseInt(formData.capacity || "0"), // Ensure it's an integer
+        description: formData.description,
+        user_id: session.user.id,
+        status: "pending",
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+    
+    console.log("Inserted Event:", eventData);
+    if (eventError) {
+      console.error("Supabase Insert Error:", eventError); // Log full error
+      toast.error(`Failed to create event: ${eventError.message}`);
+      return;
+    }
       if (eventError) throw eventError;
 
       // Create moderation entry

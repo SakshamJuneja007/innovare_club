@@ -16,7 +16,6 @@ const menuItemsLeft = [
 const menuItemsRight = [
   { title: "STATS", href: "/stats" },
   { title: "PROFILE", href: "/profile" },
-  { title: "LOGIN", href: "/auth" },
   { title: "DASHBOARD", href: "/dashboard" },
 ];
 
@@ -61,7 +60,14 @@ export default function Navbar() {
               )}
             </Link>
           ))}
-        </nav>
+
+          {/* Login Button (Only on Desktop) */}
+          <button className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+      <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+        LOGIN
+      </span>
+    </button>        </nav>
 
         {/* Mobile Menu Button */}
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-[#CFFB2D] p-2">
@@ -85,7 +91,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="fixed top-16 center-1/2 transform -translate-x-1/2 bg-black/95 backdrop-blur-md border border-[#CFFB2D]/20 p-4 w-[90vw] max-w-[400px] z-50 shadow-lg"
+              className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-black/95 backdrop-blur-md border border-[#CFFB2D]/20 p-4 w-[90vw] max-w-[400px] z-50 shadow-lg"
             >
               {[...menuItemsLeft, ...menuItemsRight].map((item) => (
                 <Link
@@ -100,7 +106,7 @@ export default function Navbar() {
                   {pathname === item.href && (
                     <motion.div
                       layoutId="activeNav"
-                      className="absolute -bottom-1 center-2/5 -translate-x-2/2 w-3/4 h-[3px] bg-gradient-to-r from-[#CFFB2D] to-[#FF3D00] rounded-md"
+                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3/4 h-[3px] bg-gradient-to-r from-[#CFFB2D] to-[#FF3D00] rounded-md"
                     />
                   )}
                 </Link>

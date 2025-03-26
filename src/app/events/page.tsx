@@ -1,54 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { Users, Calendar, MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { TextScramble } from "@/components/ui/text-scramble";
 import CountdownTimer from "@/components/CountdownTimer";
-import EventForm from "@/components/events/EventForm";
-import EventPreview from "@/components/events/EventPreview";
-import { useEventStore } from "@/stores/eventStore";
+import { TextScramble } from "@/components/ui/text-scramble";
+import { Users, MapPin, Calendar } from "lucide-react";
 
 export default function EventsPage() {
-  const fetchEvents = useEventStore(state => state.fetchEvents);
-
-  useEffect(() => {
-    // Initial fetch and setup subscriptions
-    const cleanup = fetchEvents();
-    
-    // Cleanup subscriptions on unmount
-    return () => {
-      if (cleanup) cleanup();
-    };
-  }, [fetchEvents]);
   return (
     <div className="min-h-screen bg-[#020617] pt-20">
       <Navbar />
       <div className="relative mx-auto max-w-[1400px] px-8 py-12">
         {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <TextScramble
-            className="text-4xl font-bold text-[#CFFB2D] font-['Orbitron']"
-            trigger={true}
-            speed={0.03}
-          >
-            Event Management
-          </TextScramble>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-4 text-gray-400 font-['Share_Tech_Mono']"
-          >
-            Create and manage your events
-          </motion.p>
-        </motion.div>
-
         <div className="relative mb-24 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -70,7 +33,7 @@ export default function EventsPage() {
               PRESENTATION 2025
             </TextScramble>
           </motion.div>
-
+          
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -79,8 +42,10 @@ export default function EventsPage() {
           >
             Present your startup ideas, solve real world challenges with innovation
           </motion.p>
+          <div className="flex justify-center w-full">
 
           <CountdownTimer />
+          </div>
 
           <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 sm:gap-12">
             <motion.div
@@ -136,19 +101,19 @@ export default function EventsPage() {
               {
                 name: "Jane Doe",
                 role: "CTO, TechNova",
-                image: "https://images.unsplash.com/photo-1560250097-0b93528c311a",
+                image: "https://i.ibb.co/9m3HWGhm/Whats-App-Image-2025-03-23-at-6-34-31-PM.jpg",
                 topic: "Peran AI dalam transformasi bisnis global"
               },
               {
                 name: "John Smith",
                 role: "Lead Designer, UXNext",
-                image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7",
+                image: "https://i.ibb.co/9m3HWGhm/Whats-App-Image-2025-03-23-at-6-34-31-PM.jpg",
                 topic: "Desain yang Mengutamakan Pengalaman Pengguna (UX)"
               },
               {
                 name: "Emily Tan",
                 role: "Founder, Innovate AI",
-                image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2",
+                image: "https://i.ibb.co/9m3HWGhm/Whats-App-Image-2025-03-23-at-6-34-31-PM.jpg",
                 topic: "Strategi membangun startup teknologi dari nol hingga sukses"
               }
             ].map((speaker, index) => (
@@ -207,10 +172,6 @@ export default function EventsPage() {
                     <h3 className="font-['Orbitron'] text-xl font-bold text-[#CFFB2D]/70">Past Events</h3>
                     <div className="mt-4 space-y-4">
                       <div>
-                        <p className="font-['Share_Tech_Mono'] text-[#8B30FF]">March 15, 2024</p>
-                        <p className="font-['Share_Tech_Mono'] text-gray-400">AI Workshop Series</p>
-                      </div>
-                      <div>
                         <p className="font-['Share_Tech_Mono'] text-[#8B30FF]">February 20, 2024</p>
                         <p className="font-['Share_Tech_Mono'] text-gray-400">Tech Innovation Summit</p>
                       </div>
@@ -227,13 +188,11 @@ export default function EventsPage() {
                 className="relative flex justify-start"
               >
                 <div className="w-[calc(50%-2rem)] pl-8">
-                  <div className="rounded-xl bg-black/30 p-6 backdrop-blur-sm border border-[#CFFB2D] shadow-[0_0_20px_rgba(207,251,45,0.3)]">
+                  <div className="rounded-xl bg-black/30 p-5 backdrop-blur-sm border border-[#CFFB2D] shadow-[0_0_20px_rgba(207,251,45,0.3)]">
                     <h3 className="font-['Orbitron'] text-xl font-bold text-[#CFFB2D]">Current Event</h3>
                     <div className="mt-4">
                       <p className="font-['Share_Tech_Mono'] text-[#CFFB2D]">March 27, 2025</p>
-                      <p className="font-['Orbitron'] text-xl text-white mt-2">Business Idea Presentation</p>
-                      <p className="font-['Share_Tech_Mono'] text-gray-400 mt-2">10:00 AM GMT</p>
-                      <p className="font-['Share_Tech_Mono'] text-[#8B30FF] mt-4">Vaish College of Engineering, Rohtak</p>
+                      <p className="font-['Orbitron'] text-l pr-5 text-white mt-2">Business Idea Presentation</p>
                     </div>
                   </div>
                 </div>
@@ -255,8 +214,6 @@ export default function EventsPage() {
                         <p className="font-['Share_Tech_Mono'] text-gray-400">Advanced AI Workshop</p>
                       </div>
                       <div>
-                        <p className="font-['Share_Tech_Mono'] text-[#8B30FF]">May 1, 2025</p>
-                        <p className="font-['Share_Tech_Mono'] text-gray-400">Hackathon 2025</p>
                       </div>
                     </div>
                   </div>
@@ -270,3 +227,5 @@ export default function EventsPage() {
     </div>
   );
 }
+
+

@@ -6,24 +6,37 @@ import Profile from "@/components/auth/Profile";
 import FileManager from "@/components/auth/FileManager";
 import { TextScramble } from "@/components/ui/text-scramble";
 import UserActivity from "@/components/auth/UserActivity";
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 export default function ProfilePage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error || !session) {
         router.push('/auth');
+      } else {
+        setUser(session.user);
       }
+      setLoading(false);
     };
-    
+
     checkAuth();
   }, [router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-[#CFFB2D]">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-black pt-20">
       <Navbar />
@@ -41,10 +54,11 @@ export default function ProfilePage() {
             User Profile
           </TextScramble>
         </motion.div>
+
         <div className="space-y-12">
-          <Profile />
-          <UserActivity />
-          <FileManager />
+          <Profile user={user} />
+          <UserActivity user={user} />
+          <FileManager user={user} />
         </div>
       </div>
     </main>
