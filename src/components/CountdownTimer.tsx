@@ -2,21 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/lib/supabase";
-import { toast } from "sonner";
 
 interface TimeLeft {
   days: number;
   hours: number;
   minutes: number;
   seconds: number;
-}
-
-interface FeaturedEvent {
-  id: string;
-  title: string;
-  date: string;
-  description: string;
 }
 
 export default function CountdownTimer() {
@@ -27,55 +18,11 @@ export default function CountdownTimer() {
     seconds: 0,
   });
 
-  const [featuredEvent, setFeaturedEvent] = useState<FeaturedEvent | null>(null);
-
   useEffect(() => {
-    const fetchFeaturedEvent = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("featured_events")
-          .select("*")
-          .eq("is_active", true)
-          .single();
-
-        if (error) throw error;
-        setFeaturedEvent(data);
-      } catch (error) {
-        toast.error("Failed to load event details");
-      }
-    };
-
-    fetchFeaturedEvent();
-
-    const subscription = supabase
-      .channel("featured_events_changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "featured_events",
-          filter: "is_active=eq.true",
-        },
-        (payload) => {
-          if (payload.eventType === "UPDATE" || payload.eventType === "INSERT") {
-            setFeaturedEvent(payload.new as FeaturedEvent);
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!featuredEvent) return;
+    const targetDate = new Date("2025-03-27T11:00:00").getTime();
 
     const calculateTimeLeft = () => {
       const now = new Date().getTime();
-      const targetDate = new Date(featuredEvent.date).getTime();
       const difference = targetDate - now;
 
       setTimeLeft({
@@ -90,7 +37,7 @@ export default function CountdownTimer() {
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, [featuredEvent]);
+  }, []);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center mt-4">
